@@ -106,16 +106,21 @@ class App extends Component {
 				}
 			} else if (this.state.type === 'edit') {
 				console.log('edit')
-				console.log(users)
+				// console.log(users)
+				this.state.users.forEach((item) => {
+					if(item.id === this.state.editRow.id) {
+						item = Object.assign(item, values)
+					}
+				})
 				this.setState({
-					visible:false,
+					visible:false
 				})
 			}
 			
 		})
 	}
     modal (type, row) {
-		console.log(type);
+		console.log(row);
         this.setState({
             visible: true
         }, () => {
@@ -136,7 +141,8 @@ class App extends Component {
 			// console.log(row.id)
 			this.setState({
 				modalLabel:'编辑用户',
-				type:type
+				type:type,
+				editRow:row
 			})
 		}
 			// console.log(this.modalLabel);
