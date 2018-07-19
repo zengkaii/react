@@ -53,6 +53,8 @@ class App extends Component {
 
 	]
     state= {
+		type:'',
+		modalLabel:'',
 		visible: false,
 		users: [
 			{
@@ -76,17 +78,40 @@ class App extends Component {
 	]
     }
     handleOk () {
-        // console.log('ok')
-        // this.setState({
-        //     visible: false
-		// })
+		// console.log(type)
 		this.props.form.validateFieldsAndScroll((err, values) => {
-			console.log(err)
-			if (!err) {
+			let newusername = values.username;
+			let newage = values.age;
+			let newaddress = values.address
+			let users = this.state.users;
+			if(this.state.type === 'add') {
+				if (!err) {
+
+					let getid = this.state.users[this.state.users.length-1].id;
+					// console.log(getid)
+					let newid = getid +1
+					// console.log(newid)
+					console.log(users)
+					users.push({
+						username:newusername,
+						age:newage,
+						address:newaddress,
+						id: newid
+					})
+					this.setState({
+						visible: false,
+						users:users
+	
+					})
+				}
+			} else if (this.state.type === 'edit') {
+				console.log('edit')
+				console.log(users)
 				this.setState({
-					visible: false
+					visible:false,
 				})
 			}
+			
 		})
 	}
     modal (type, row) {
@@ -95,12 +120,26 @@ class App extends Component {
             visible: true
         }, () => {
 			this.props.form.resetFields();
-			if (type === 'add') return;
+			if (type === 'add') {
+				this.setState({
+					modalLabel:'添加用户',
+					type:type
+				})
+			} else if(type === 'edit'){
+
 			this.props.form.setFieldsValue({
 				username: row.username,
 				age: row.age,
-				address: row.address
+				address: row.address,
+				// id: row.id
 			})
+			// console.log(row.id)
+			this.setState({
+				modalLabel:'编辑用户',
+				type:type
+			})
+		}
+			// console.log(this.modalLabel);
 		})
 	}
 
@@ -129,7 +168,7 @@ class App extends Component {
 				<Row style={{paddingTop: 20}}>
 					<Table dataSource={this.state.users} columns={this.columns} rowKey={row => row.id} bordered pagination={false}/>
 				</Row>
-                <Modal title="添加用户" visible={this.state.visible} 
+                <Modal title={this.state.modalLabel} visible={this.state.visible} 
                 onOk={() => this.handleOk()}
                 onCancel={() => this.setState({visible: false})}>
                 <Form>
