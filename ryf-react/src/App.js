@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Table, Pagination, Input, Row, Button, Modal, Form } from 'antd'; //对react ui 阿里的antd 部分引用
+import axios from 'axios'
+import { Table, Pagination, Input, Row, Button, Modal, Form, message } from 'antd'; //对react ui 阿里的antd 部分引用
 import 'antd/dist/antd.css';
 import logo from './logo.svg';
 import './App.css';
@@ -98,10 +99,22 @@ class App extends Component {
 						address:newaddress,
 						id: newid
 					})
-					this.setState({
-						visible: false,
-						users:users
 	
+					let data = {
+						username: values.username,
+						age: values.age,
+						address: values.address
+					}
+					console.log(data)
+					axios.post('http://127.0.0.1:3006/user',data)
+					.then(msg => {
+						console.log(msg);
+						this.setState({
+							visible: false,
+							users:users
+		
+						});
+						message.success('添加成功')
 					})
 				}
 			} else if (this.state.type === 'edit') {
@@ -120,7 +133,7 @@ class App extends Component {
 		})
 	}
     modal (type, row) {
-		console.log(row);
+		// console.log(row);
         this.setState({
             visible: true
         }, () => {
@@ -148,7 +161,13 @@ class App extends Component {
 			// console.log(this.modalLabel);
 		})
 	}
-
+	serachUser (event) {
+		console.log('search')
+		axios.get('http://localhost:3006/users')
+		.then(data => {
+			console.log(data)
+		})
+	}
     render() {
 		const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -168,7 +187,7 @@ class App extends Component {
           			<h1 className="App-title">Welcome to React</h1>
        			 </header>
                 <Row style={{marginTop:50}}>
-                    <Search style={{width: 300}}  />
+                    <Search style={{width: 300}} onChange={this.serachUser.bind(this)} />
                     <Button type="primary" style={{marginLeft: 20}} onClick={() => this.modal('add')} >添加用户</Button>
                 </Row>
 				<Row style={{paddingTop: 20}}>
