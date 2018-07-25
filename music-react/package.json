@@ -1,0 +1,28 @@
+{
+  "name": "music-react",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "jsonp": "^0.2.1",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "1.1.4",
+    "swiper": "3.4.2"
+  },
+  "scripts": {
+    "start": "node scripts/customized-build start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "css-loader": "^1.0.0",
+    "poststylus": "^1.0.0",
+    "proxyquire": "^2.0.1",
+    "rewire": "^4.0.1",
+    "style-loader": "^0.21.0",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2"
+  }
+}
