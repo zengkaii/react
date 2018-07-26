@@ -40,6 +40,7 @@ class Recommend extends Component {
         })
         getNewAlbum().then(res => {
             if (res) {
+                console.log(res)
                 if (res.code === CODE_SUCCESS) {
                     let albumList = res.albumlib.data.list;
                     // console.log(albumList)
