@@ -5,8 +5,8 @@ import './App.styl';
 import Recommend from './recommend/Recommend';
 import Ranking from './ranking/Ranking';
 import Search from './search/Search';
-
-import MiniPlayer from '../containers/MiniPlayer'
+import MusicPlayer from './play/MusicPlayer'
+// import MiniPlayer from '../containers/MiniPlayer'
 import { BrowserRouter as Router, Route, Switch, Redirect, NavLink } from 'react-router-dom';
 
 class App extends Component {
@@ -44,7 +44,7 @@ class App extends Component {
 						<Route component={Recommend}></Route>
 					</Switch>
 				</div>
-				<MiniPlayer/>
+				<MusicPlayer/>
 			</div>
 			</Router>
 		);

@@ -1,10 +1,10 @@
 import { combineReducers} from 'redux';
 import * as ActionTypes from './actionTypes';
-// import action from './actions'
 const initialState = {
     song: {},
     songs: [],
     showStates: false,
+    
 }
 function song (song = initialState.song, action) {
     switch (action.type) {
@@ -19,12 +19,25 @@ function songs (songs = initialState.songs, action) {
     switch (action.type) {
         case ActionTypes.SET_SONGS:
             return action.songs;
+        case ActionTypes.REMOVE_SONG_FROM_LIST:
+            return songs.filter(song => song.id !== action.id)
         default:
             return songs;
     }
 }
+
+function showStates (showStates = initialState.showStates, action) {
+    switch (action.type) {
+        case ActionTypes.SHOW_PLAYER:
+            return action.showStates
+        default: 
+            return showStates
+    }
+}
+
 const reducer = combineReducers({
     song,
-    songs
+    songs,
+    showStates
 })
 export default reducer
