@@ -13,14 +13,19 @@ let routes = [
     "component": require('../../layout/index.js').default,
     "routes": [
       {
-        "path": "/discover",
+        "path": "/discover.html",
         "exact": true,
         "component": require('../discover/page.jsx').default
       },
       {
-        "path": "/home",
+        "path": "/home.html",
         "exact": true,
         "component": require('../home/page.jsx').default
+      },
+      {
+        "path": "/index.html",
+        "exact": true,
+        "component": require('../index.js').default
       },
       {
         "path": "/",
@@ -28,27 +33,27 @@ let routes = [
         "component": require('../index.js').default
       },
       {
-        "path": "/list",
+        "path": "/list.html",
         "exact": true,
         "component": require('../list.js').default
       },
       {
-        "path": "/order",
+        "path": "/order.html",
         "exact": true,
         "component": require('../order/page.jsx').default
       },
       {
-        "path": "/profile",
+        "path": "/profile.html",
         "exact": true,
         "component": require('../profile/page.jsx').default
       },
       {
-        "path": "/shop",
+        "path": "/shop.html",
         "exact": true,
         "component": require('../shop/page.jsx').default
       },
       {
-        "component": () => React.createElement(require('C:/Users/曾凯/AppData/Roaming/npm/node_modules/umi/node_modules/umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'pages', routes: '[{"path":"/","component":"./layout\\\\index.js","routes":[{"path":"/discover","exact":true,"component":"./pages/discover/page.jsx"},{"path":"/home","exact":true,"component":"./pages/home/page.jsx"},{"path":"/","exact":true,"component":"./pages/index.js"},{"path":"/list","exact":true,"component":"./pages/list.js"},{"path":"/order","exact":true,"component":"./pages/order/page.jsx"},{"path":"/profile","exact":true,"component":"./pages/profile/page.jsx"},{"path":"/shop","exact":true,"component":"./pages/shop/page.jsx"}]}]' })
+        "component": () => React.createElement(require('D:/a/react/umi_app/node_modules/umi-build-dev/lib/plugins/404/NotFound.js').default, { pagesPath: 'pages', routes: '[{"path":"/","component":"./layout\\\\index.js","routes":[{"path":"/discover.html","exact":true,"component":"./pages/discover/page.jsx"},{"path":"/home.html","exact":true,"component":"./pages/home/page.jsx"},{"path":"/index.html","exact":true,"component":"./pages/index.js"},{"path":"/","exact":true,"component":"./pages/index.js"},{"path":"/list.html","exact":true,"component":"./pages/list.js"},{"path":"/order.html","exact":true,"component":"./pages/order/page.jsx"},{"path":"/profile.html","exact":true,"component":"./pages/profile/page.jsx"},{"path":"/shop.html","exact":true,"component":"./pages/shop/page.jsx"}]}]' })
       }
     ]
   }
