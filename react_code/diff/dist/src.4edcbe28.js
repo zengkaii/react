@@ -116,7 +116,7 @@ exports.setAttribute = setAttribute;
 function setAttribute(dom, name, value) {
     if (name === 'className') name = 'class';
     if (/on\w+/.test(name)) {
-        // console.log(1111)
+        // console.log(name)
         name = name.toLowerCase();
         dom[name] = value || '';
     } else if (name === 'style') {
@@ -139,15 +139,59 @@ function setAttribute(dom, name, value) {
         }
     }
 }
-},{}],"src\\react-dom\\render.js":[function(require,module,exports) {
+},{}],"src\\react\\component.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _render = require("../react-dom/render");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Component = function () {
+    function Component() {
+        var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+        _classCallCheck(this, Component);
+
+        this.isReactComponent = true;
+        this.state = {};
+        this.props = props;
+    }
+
+    _createClass(Component, [{
+        key: "setState",
+        value: function setState(stateChange) {
+            Object.assign(this.state, stateChange);
+            // 更新DOM
+            (0, _render.renderComponent)(this);
+        }
+    }]);
+
+    return Component;
+}();
+
+exports.default = Component;
+},{"../react-dom/render":"src\\react-dom\\render.js"}],"src\\react-dom\\render.js":[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.renderComponent = renderComponent;
 exports.render = render;
 
 var _dom = require('./dom');
+
+var _component = require('../react/component');
+
+var _component2 = _interopRequireDefault(_component);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * 将虚拟dom 变真实dom
@@ -155,7 +199,7 @@ var _dom = require('./dom');
  * @return 返回dom
  */
 function _render(vnode) {
-    console.log(vnode);
+    //  console.log(vnode);
     // 1. 使用递归方法 将结点转成dom, 子节点递归，出口就是文本节点
     // 2. 节点类型 三种：
     //      文本节点 createTextNode
@@ -165,9 +209,19 @@ function _render(vnode) {
     if (vnode === undefined || vnode === null || typeof vnode === 'boolean') {
         vnode = '';
     }
+    if (typeof vnode === 'number') {
+        vnode = String(vnode);
+    }
     if (typeof vnode === 'string') {
         var textNode = document.createTextNode(vnode);
         return textNode;
+    }
+    // <Counter/> 不是正常的标签，vnode, tag = function Counter(){}
+    if (typeof vnode.tag === 'function') {
+        // console.log(vnode);
+        var component = createComponent(vnode.tag, vnode.attrs);
+        setComponentProps(component, vnode.attrs);
+        return component.base;
     }
     var dom = document.createElement(vnode.tag);
     if (vnode.attrs) {
@@ -183,11 +237,43 @@ function _render(vnode) {
     }
     return dom;
 }
+function createComponent(component, props) {
+    var inst = void 0;
+    if (component.prototype && component.prototype.render) {
+        inst = new component(props);
+    } else {
+        inst = new _component2.default(props);
+        inst.constructor = component;
+        inst.render = function () {
+            return this.constructor(props);
+        };
+    }
+    return inst;
+}
+function setComponentProps(component, props) {
+    component.props = props;
+    renderComponent(component);
+}
+// function replaceChild () {
+
+// }
+// 将 component里的jsx转为DOM 还会在setState的时候调用
+function renderComponent(component) {
+    var base = void 0; // jsx => DOM
+    var renderer = component.render();
+    base = _render(renderer);
+    if (component.base && component.base.parentNode) {
+        component.base.parentNode.replaceChild(base, component.base);
+    }
+    component.base = base;
+    base._component = component;
+    // 
+}
 function render(vnode, container) {
     // console.log(vnode, container)
     return container.appendChild(_render(vnode));
 }
-},{"./dom":"src\\react-dom\\dom.js"}],"src\\react-dom\\index.js":[function(require,module,exports) {
+},{"./dom":"src\\react-dom\\dom.js","../react/component":"src\\react\\component.js"}],"src\\react-dom\\index.js":[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -220,39 +306,6 @@ function createElement(tag, attrs) {
 }
 
 exports.default = createElement;
-},{}],"src\\react\\component.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Component = function () {
-    function Component() {
-        var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-        _classCallCheck(this, Component);
-
-        this.isReactComponent = true;
-        this.state = {};
-        this.props = props;
-    }
-
-    _createClass(Component, [{
-        key: "setState",
-        value: function setState(stateChange) {
-            Object.assign(this.state, stateChange);
-        }
-    }]);
-
-    return Component;
-}();
-
-exports.default = Component;
 },{}],"src\\react\\index.js":[function(require,module,exports) {
 'use strict';
 
@@ -298,20 +351,48 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Counter = function (_React$Component) {
     _inherits(Counter, _React$Component);
 
-    function Counter() {
+    function Counter(props) {
         _classCallCheck(this, Counter);
 
-        return _possibleConstructorReturn(this, (Counter.__proto__ || Object.getPrototypeOf(Counter)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (Counter.__proto__ || Object.getPrototypeOf(Counter)).call(this, props));
+
+        _this.state = {
+            num: 1
+        };
+        return _this;
     }
 
     _createClass(Counter, [{
         key: 'render',
         value: function render() {
+            var _this2 = this;
+
             return _react2.default.createElement(
                 'div',
                 null,
-                'Counter'
+                _react2.default.createElement(
+                    'h1',
+                    null,
+                    'count: ',
+                    this.state.num
+                ),
+                _react2.default.createElement(
+                    'button',
+                    { onClick: function onClick() {
+                            return _this2.onClick();
+                        } },
+                    'add'
+                )
             );
+        }
+    }, {
+        key: 'onClick',
+        value: function onClick() {
+            // console.log(1111)
+            this.state.num++;
+            this.setState({
+                num: this.state.num
+            });
         }
     }]);
 

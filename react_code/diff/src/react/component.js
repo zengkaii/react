@@ -1,3 +1,5 @@
+import { renderComponent } from "../react-dom/render";
+
 class Component {
     constructor (props = {}) {
         this.isReactComponent = true;
@@ -6,6 +8,8 @@ class Component {
     }
     setState(stateChange) {
         Object.assign(this.state, stateChange);
+        // 更新DOM
+        renderComponent(this)
     }
 }
 export default Component

@@ -1,10 +1,26 @@
 import ReactDOM from './react-dom'
 import React from './react'
 class Counter extends React.Component {
+    constructor (props) {
+        super(props);
+        this.state = {
+            num: 1
+        }
+    }
     render () {
         return (
-            <div>Counter</div>
+            <div>
+                <h1>count: {this.state.num}</h1>
+                <button onClick={() => this.onClick()}>add</button>
+            </div>
         )
+    }
+    onClick () {
+        // console.log(1111)
+        this.state.num ++
+        this.setState({
+            num: this.state.num
+        })
     }
 }
 ReactDOM.render(
